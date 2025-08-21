@@ -1,3 +1,16 @@
+/* Steps: 
+ *
+ * CREATE A SPARSE MATRIX
+ * FILL THE SPARSE MATRIX
+ * PRINT IT
+ * CREATE ANOTHER SPARSE MATRIX
+ * PRINT IT
+ * ADD 2 SPARSE MATRICES
+ * PRINT RESULTANT MATRIX
+ * TRANSPOSE THE RESULTANT MATRIX
+ * PRINT IT
+*/
+
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -73,13 +86,71 @@ struct Sparse* add(struct Sparse *s1,struct Sparse *s2){
     return add;
 }
 
+void fast_transpose(struct Sparse *t, struct Sparse *s) {
+    t->m = s->n;       // transpose: rows become cols
+    t->n = s->m;
+    t->num = s->num;
+
+    if (s->num > 0) {
+        t->e = (struct Element*)malloc(s->num * sizeof(struct Element));
+
+        int *rowterms = (int*)malloc(s->n * sizeof(int));
+        int *start_pos = (int*)malloc(s->n * sizeof(int));
+
+
+        for (int i = 0; i < s->n; i++) {
+            rowterms[i] = 0;
+        }
+
+
+        for (int i = 0; i < s->num; i++) {
+            rowterms[s->e[i].j]++;
+        }
+
+        start_pos[0] = 0;
+        for (int i = 1; i < s->n; i++) {
+            start_pos[i] = start_pos[i-1] + rowterms[i-1];
+        }
+
+        for (int i = 0; i < s->num; i++) {
+            int col = s->e[i].j;
+            int pos = start_pos[col]++;
+            t->e[pos].i = s->e[i].j;
+            t->e[pos].j = s->e[i].i;
+            t->e[pos].x = s->e[i].x;
+        }
+
+        free(rowterms);
+        free(start_pos);
+    } else {
+        t->e = NULL;
+    }
+}
+
+
 int main(){
-    struct Sparse s1,s2,*sum;
+    struct Sparse s1,s2,*sum, t;
     create(&s1);
     create(&s2);
+
+    printf("\nMatrix 1:\n");
     Display(s1);
+
+    printf("\nMatrix 2:\n");
     Display(s2);
+
     sum = add(&s1,&s2);
+    printf("\nSum Matrix:\n");
     Display(*sum);
+
+    printf("\nTransposed Matrix:\n");
+    fast_transpose(&t, sum);
+    Display(t);
+
+    free(s1.e);
+    free(s2.e);
+    free(sum->e);
+    free(sum);
+    free(t.e);
     return 0;
 }
