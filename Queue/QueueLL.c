@@ -17,8 +17,10 @@ void enqueue(int x){
         if(front==NULL){
             front = rear = q;
         }
+        else {
         rear->next=q;
         rear = q;
+        }
     }
     return;
 

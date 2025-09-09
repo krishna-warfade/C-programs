@@ -32,7 +32,9 @@ void create(struct Sparse *s){
     scanf("%d %d",&s->m,&s->n);
     printf("Enter number of non-zero elements:");
     scanf("%d",&s->num);
+
     s->e=(struct Element*)malloc(s->num*sizeof(struct Element));
+
     printf("Enter the elements:");
     for(int i  = 0;i<s->num;i++){
         scanf("%d %d %d",&s->e[i].i,&s->e[i].j,&s->e[i].x);
@@ -64,17 +66,20 @@ struct Sparse* add(struct Sparse *s1,struct Sparse *s2){
     }
     int i=0,j=0,k=0;
     while(i<s1->num&&j<s2->num){
+        // difference in rows
         if(s1->e[i].i<s2->e[j].i){
             add->e[k++]=s1->e[i++];
         }else if(s1->e[i].i>s2->e[j].i){
             add->e[k++]=s2->e[j++];
         }else{
+         // difference in columns    
             if(s1->e[i].j<s2->e[j].j){
                 add->e[k++]=s1->e[i++];
             }else if(s1->e[i].j>s2->e[j].j){
                 add->e[k++]=s2->e[j++];
-            }else{
-                add->e[k]=s1->e[i];
+            }else{ 
+        // same row and column
+                add->e[k]=s1->e[i]; // take same row & col
                 add->e[k++].x=s1->e[i++].x+s2->e[j++].x;
             }
         }
