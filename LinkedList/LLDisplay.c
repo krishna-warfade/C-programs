@@ -115,7 +115,7 @@ void SortedInsert(struct Node *p, int x)
             last = p;
             p = p->next;
         }
-        if (p == head)
+        if (x < p->data) // should be value based not pointer based(p == head)
         {
             t->next = head;
             head = t;
