@@ -26,7 +26,7 @@ void push(struct stack *st,int x){
         printf("Stack Overflow");
     }else{
         // st->top++;
-        st->s[st->(++top)] = x;
+        st->s[++(st->top)] = x;
     }
 }
 

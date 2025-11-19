@@ -62,8 +62,8 @@ int peek(int index)
         {
             x = p->data;
         }
-        return x;
     }
+    return x;
 }
 
 void Display()
@@ -95,9 +95,8 @@ int isBalance(char *exp){
     }
     if(top==NULL){
         return 1;
-    }else{
-        return 0;
     }
+    return 0;
 }
 int main()
 {
