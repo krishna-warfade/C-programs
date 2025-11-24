@@ -130,8 +130,12 @@ int Delete(Node *h, int pos)
         for (int i = 0; i < pos - 2; i++)
         {
             h = h->next;
+            if (h == Head) // out of bound
+                return -1;
         }
-        q = h->next;
+        q = h->next; // node to be deleted
+        if (q == Head)
+            return -1;
         h->next = q->next;
         x = q->data;
         free(q);
